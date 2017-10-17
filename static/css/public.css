@@ -1,0 +1,141 @@
+.headline {
+  border-bottom: 4px solid #f6f6f6;
+}
+.headline-title.onlyheading {
+  margin: 20px 0;
+}
+.headline img {
+  max-width: 100%;
+  vertical-align: top;
+}
+.headline-background-link {
+  line-height: 2em;
+  position: relative;
+  display: block;
+  padding: 20px 45px 20px 20px !important;
+}
+.icon-arrow-right {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  background-image: url(http://static.daily.zhihu.com/img/share-icons.png);
+  background-repeat: no-repeat;
+  display: inline-block;
+  vertical-align: middle;
+  background-position: -70px -20px;
+  width: 10px;
+  height: 15px;
+  margin-top: -7.5px;
+}
+.headline-background .heading {
+  color: #999;
+  font-size: 15px!important;
+  margin-bottom: 8px;
+  line-height: 1em;
+}
+.headline-background .heading-content {
+  color: #444;
+  font-size: 17px!important;
+  line-height: 1.2em;
+}
+.headline-title {
+  line-height: 1.2em;
+  color: #000;
+  font-size: 22px;
+  margin: 20px 0 10px;
+  padding: 0 20px!important;
+  font-weight: bold;
+}
+.meta {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 16px;
+    color: #b8b8b8;
+  }
+  .meta .source-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 4px;
+  }
+  .meta .time {
+    float: right;
+    margin-top: 2px;
+  }
+  .content {
+    color: #444;
+    line-height: 1.6em;
+    font-size: 17px;
+    margin: 10px 0 20px;
+  }
+  .content img {
+    max-width: 100%;
+    display: block;
+    margin: 30px auto;
+  }
+  
+  .content img + img {
+    margin-top: 15px;
+  }
+  
+  .content img[src*="zhihu.com/equation"] {
+    display: inline-block;
+    margin: 0 3px;
+  }
+  .content a {
+    color: #259;
+  }
+  .content a:hover {
+    text-decoration: underline;
+  }
+  .view-more {
+    margin-bottom: 25px;
+    text-align: center;
+  }
+  .view-more a {
+    font-size: 16px;
+    display: inline-block;
+    width: 125px;
+    height: 30px;
+    line-height: 30px;
+    background: #f0f0f0;
+    color: #B8B8B8;
+  }
+  .question {
+    overflow: hidden;
+    padding: 0 15px!important;
+  }
+  .question + .question {
+    border-top: 5px solid #f6f6f6;
+  }
+  .question-title {
+    line-height: 1.4em;
+    color: #000;
+    font-weight: 700;
+    font-size: 18px;
+    margin: 20px 0;
+  }
+  .meta .author {
+    color: #444;
+    font-weight: 700;
+  }
+  .answer + .answer {
+    border-top: 2px solid #f6f6f6;
+    padding-top: 20px;
+  }
+  .footer {
+    text-align: center;
+    color: #b8b8b8;
+    font-size: 13px;
+    padding: 20px 0;
+  }
+  .footer a {
+    color: #b8b8b8;
+  }
+  .question .view-more a {
+    width: 100%;
+    display: block;
+  }
+  .hot-comment {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }

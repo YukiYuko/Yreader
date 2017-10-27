@@ -15,19 +15,19 @@
 
 <template>
     <div class="FootBar" flex>
-        <router-link to="home" box="1" flex justify="center" href="javascript:;" dir="column">
+        <router-link to="/home" box="1" flex justify="center" href="javascript:;" dir="column">
             <i class="iconfont icon-shujia"></i>
             <span>书架</span>
         </router-link>
-        <router-link to="rank" box="1" flex justify="center" href="javascript:;" dir="column">
+        <router-link to="/rank" box="1" flex justify="center" href="javascript:;" dir="column">
             <i class="iconfont icon-jingxuan"></i>
             <span>排行</span>
         </router-link>
-        <router-link to="type" box="1" flex justify="center" href="javascript:;" dir="column">
+        <router-link to="/type" box="1" flex justify="center" href="javascript:;" dir="column">
             <i class="iconfont icon-shuku"></i>
             <span>书库</span>
         </router-link>
-        <router-link to="find" box="1" flex justify="center" href="javascript:;" dir="column">
+        <router-link to="/find" box="1" flex justify="center" href="javascript:;" dir="column">
             <i class="iconfont icon-faxian"></i>
             <span>发现</span>
         </router-link>

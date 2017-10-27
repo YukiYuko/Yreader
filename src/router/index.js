@@ -5,6 +5,8 @@ import home from '@/views/home'
 import rank from '@/views/rank'
 import type from '@/views/type'
 import find from '@/views/find'
+import book from '@/views/book'
+import typeDetail from '@/views/typeDetail'
 
 Vue.use(Router)
 
@@ -13,7 +15,10 @@ export default new Router({
     {
       path: '/home',
       name: 'home',
-      component: home
+      component: home,
+      children: [
+        {path: '/book/:id', name: 'book', component: book},
+      ]
     },
     {
       path: '/rank',
@@ -29,6 +34,11 @@ export default new Router({
       path: '/find',
       name: 'find',
       component: find
+    },
+    {
+      path: '/type/:id', 
+      name: 'typeDetail', 
+      component: typeDetail
     }
   ]
 })

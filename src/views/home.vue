@@ -6,17 +6,25 @@
 
 <template>
     <div class="home">
-        这是主页
+        <ul class="homeList">
+            <li @click="go" style="line-height:40px;">啊啊啊啊</li>
+        </ul>
+        <router-view></router-view>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'Home',
-    data() {
-        return {
-
-        }
+  name: "Home",
+  data() {
+    return {};
+  },
+  methods: {
+    go () {
+      this.$router.push({
+        path: `/book/111`
+      })
     }
-}
+  }
+};
 </script>

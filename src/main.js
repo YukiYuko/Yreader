@@ -7,7 +7,7 @@ import 'mint-ui/lib/style.css';
 
 Vue.use(Mint);
 Vue.use(Ajax,{
-  baseURL: 'http://35.189.165.140:3000/'
+  baseURL: 'http://novel.juhe.im/'
 })
 
 Vue.config.productionTip = false

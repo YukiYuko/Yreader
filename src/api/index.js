@@ -24,14 +24,14 @@ export default {
        * http://api.zhuishushenqi.com/cats/lv2
        */
     getCategory() {
-        return Vue.http.get('/cats/lv2/statistics')
+        return Vue.http.get('categories')
     },
 
     /**
        * 获取细分的类别
        */
     getCategoryDetail() {
-        return Vue.http.get('/cats/lv2')
+        return Vue.http.get('sub-categories')
     },
 
     /**
@@ -46,7 +46,7 @@ export default {
        */
     // todo 入参需要用es6优化
     getNovelListByCat(gender, type, major, minor = '', start = 0, limit = 20) {
-        return Vue.http.get('/book/by-categories?gender=' + gender + '&type=' + type + '&major=' + major + '&minor=' + minor + '&start=' + start + '&limit=' + limit)
+        return Vue.http.get('category-info?gender=' + gender + '&type=' + type + '&major=' + major + '&minor=' + minor + '&start=' + start + '&limit=' + limit)
     },
 
     /**

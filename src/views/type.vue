@@ -15,7 +15,7 @@
     .typeTitle {
       padding: 20px 10px;
     }
-    .title{ font-size: 16px;color: #333;}
+    .title{ font-size: 16px;color: #333;margin-bottom: 5px;}
     .count{ font-size: 14px;color: #999;}
   }
 }
@@ -28,8 +28,8 @@
                 <div class="typeBox" v-for="(item,index) in list" :key="index">
                   <div class="typeTitle">{{['男','女','出版'][index]}}</div>
                   <grid :cols="3">
-                    <grid-item :link="`/type/${book.name}`" v-for="(book,i) in item" :key="i">
-                      <div slot="label">
+                    <grid-item v-for="(book,i) in item" :key="i">
+                      <div slot="label" @click="$router.push({path:`/type/${book.name}`,query:{gender:['male','female','press'][index]}})">
                         <h2 class="title">{{book.name}}</h2>
                         <p class="count">{{book.bookCount}}</p>
                       </div>
@@ -62,9 +62,10 @@ export default {
       api
         .getCategory()
         .then(({ data }) => {
-          this.list.push(data.male);
-          this.list.push(data.female);
-          this.list.push(data.press);
+          this.list.push(data.data.male);
+          this.list.push(data.data.female);
+          this.list.push(data.data.press);
+          console.log(this.list)
         })
         .catch(() => {});
     }, 20);

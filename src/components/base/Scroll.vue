@@ -54,6 +54,13 @@
         default: null
       },
       /**
+       * 是否开启上啦加载
+       */
+      pullUpLoad: {
+        type: null,
+        default: false
+      },
+      /**
        * 是否派发滚动到底部的事件，用于上拉加载
        */
       pullup: {
@@ -98,7 +105,8 @@
           probeType: this.probeType,
           click: this.click,
           scrollX: this.scrollX,
-          scrollY: this.scrollY
+          scrollY: this.scrollY,
+          pullUpLoad: this.pullUpLoad
         })
 
         // 是否派发滚动事件

@@ -20,11 +20,13 @@
   .list-menu{ 
     position: fixed;left: 0;right: 0;top: 46px;height: 45px;
     overflow: hidden;box-shadow: 0 2px 2px -2px rgba(0,0,0,0.05);
-    a{ height: 45px;display: inline-block;line-height: 45px;width: 60px;text-align: center}
+    a{ height: 45px;display: inline-block;line-height: 45px;width: 60px;text-align: center;
+      &.on{ color: #e87a90}
+    }
     &.list-menu2{ top: 91px;box-shadow: none;box-shadow: 0 2px 2px -2px rgba(0,0,0,0.05);}
   }
   .typeList{ 
-    position: absolute;top: 136px;bottom: 0;left: 0;right: 0;
+    position: absolute;bottom: 0;left: 0;right: 0;
     background-color: #F5F2ED;overflow: hidden;
     .item{ position: relative;padding: 15px;border-bottom: 1px solid #dddddd;
       img{ width: 60px; height: 75px;position: absolute;left: 15px;top: 15px;}
@@ -48,20 +50,20 @@
   <div class="typeDetail">
     <x-header class="header">{{$route.params.id}}</x-header>
     <div class="list-menu">
-      <a href="javascript:;" v-for="(item,index) in type" :key="index">{{item.name}}</a>
+      <a href="javascript:;" :class="{on:type === item.type}" @click="select(item.type,'type')" v-for="(item,index) in types" :key="index">{{item.name}}</a>
     </div>
     
     <div class="list-menu list-menu2" v-if="mins.length">
       <x-scroll>
-        <div>
-          <a href="javascript:;">全部</a>
+        <div @click="select('','minor')">
+          <a href="javascript:;" :class="{on:minor === ''}">全部</a>
         </div>
-        <div v-for="(item,index) in mins" :key="index">
-          <a href="javascript:;">{{item}}</a>
+        <div v-for="(item,index) in mins" :key="index" @click="select(item,'minor')">
+          <a href="javascript:;" :class="{on:minor === item}">{{item}}</a>
         </div>
       </x-scroll>
     </div>
-    <scroll :data="list" class="typeList" @pullingUp="_getDetail" :pullUpLoad="true">
+    <scroll ref="scroll" :data="list" class="typeList" :style="{top:mins.length>0?'136px':'91px'}" @pullingUp="_getDetail" :pullUpLoad="true">
       <ul>
         <li class="item" v-for="(book,index) in list" :key="index">
           <img :src="staticPath+book.cover" alt="蕾姆">
@@ -88,7 +90,7 @@ import { staticPath } from "@/utils/const.js"
 export default {
   data() {
     return {
-      type:[{
+      types:[{
         type: 'hot',
         name: '热门'
       }, {
@@ -107,7 +109,11 @@ export default {
       mins: [],
       list: [],
       staticPath,
-      start: 0
+      start: 0,
+      gender: this.$route.query.gender,
+      type: 'hot',
+      major: this.$route.params.id,
+      minor: '',
     }
   },
   components: {
@@ -136,12 +142,23 @@ export default {
     },
     // 获取详细数据
     _getDetail () {
-      api.getNovelListByCat(this.$route.query.gender,'hot',this.$route.params.id,'',this.start * 20)
+      api.getNovelListByCat(this.gender,this.type,this.major,this.minor,this.start * 20)
       .then(({ data }) => {
+        if (data.data.books.length === 0 ){
+          this.$refs.scroll.forceUpdate()
+          return
+        }
         this.list = [...this.list,...data.data.books]
         this.start++
       })
       .catch(() => {});
+    },
+    // 筛选数据
+    select (value, select) {
+      this.start = 0
+      select === 'type' ? this.type = value : this.minor = value
+      this.list = []
+      this._getDetail()
     }
   }
 };

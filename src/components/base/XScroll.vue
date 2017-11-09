@@ -13,6 +13,10 @@
   export default {
     name: 'slider',
     props: {
+      click: {
+        type: Boolean,
+        default: true
+      }
     },
     data() {
       return {
@@ -52,7 +56,8 @@
       _initSlider() {
         this.slider = new BScroll(this.$refs.slider, {
           scrollX: true,
-          scrollY: false
+          scrollY: false,
+          click: this.click
         })
       }
     }

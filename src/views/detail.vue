@@ -60,6 +60,10 @@
   }
   .book-intro{ color: #333;font-size: @28px;line-height: @40px}
 }
+.readBox{ height: 100%;
+  .readBoxTop, .readBoxBottom{ height: @110px;background: rgba(0,0,0,0.8)}
+}
+.vux-popup-dialog{ overflow-x: hidden;overflow-y: auto !important;}
 </style>
 <template>
   <div class="detail">
@@ -77,7 +81,7 @@
       </div>
       <div class="foot">
         <a href="javascript:;">追更新</a>
-        <a href="javascript:;">开始阅读</a>
+        <a @click="_openRead" href="javascript:;">开始阅读</a>
       </div>
     </div>
     <div class="section book-status" flex>
@@ -98,7 +102,18 @@
       <span v-for="(tag, index) in data.tags" :key="index" class="tag">{{tag}}</span>
     </div>
     <div class="section book-intro" v-if="data">{{data.longIntro}}</div>
-
+    <div v-transfer-dom>
+      <popup v-model="isReading" height="100%">
+        <div class="readBox" @click="openSetting">
+          <popup :show-mask="false" v-model="readBoxTop" position="top">
+            <div class="readBoxTop"></div>
+          </popup>
+          <popup :show-mask="false" v-model="readBoxBottom" position="bottom">
+            <div class="readBoxBottom"></div>
+          </popup>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -108,13 +123,20 @@ import { staticPath } from "@/utils/const.js"
 import moment from 'moment'
 import Scroll from "@/components/base/scroll/scroll.vue";
 import { XHeader } from 'vux'
+import { TransferDom, Popup} from 'vux'
 moment.locale('zh-cn');
 export default{
   data(){
     return{
       staticPath,
-      data: {}
+      data: {},
+      isReading: false,
+      readBoxBottom: false,   // 阅读底部菜单
+      readBoxTop: false   // 阅读顶部菜单
     }
+  },
+  directives: {
+    TransferDom
   },
   filters: {
     ago (time) {
@@ -127,7 +149,7 @@ export default{
     }
   },
   components: {
-    Scroll, XHeader
+    Scroll, XHeader, Popup
   },
   created() {
     setTimeout(() => {
@@ -143,6 +165,16 @@ export default{
       }).catch(() => {
         console.log('请求错误')
       })
+    },
+    // 打开阅读
+    _openRead() {
+      this.isReading = true
+    },
+    // 打开设置
+    openSetting() {
+      console.log(1)
+      this.readBoxBottom = !this.readBoxBottom
+      this.readBoxTop = !this.readBoxTop
     }
   }
 }

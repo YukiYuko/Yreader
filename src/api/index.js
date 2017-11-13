@@ -54,7 +54,7 @@ export default {
        * @param {String} bookId 小说id
        */
     getBook(bookId) {
-        return Vue.http.get('/book/' + bookId)
+        return Vue.http.get('/book-info/' + bookId)
     },
 
     /**

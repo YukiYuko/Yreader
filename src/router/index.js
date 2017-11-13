@@ -7,6 +7,7 @@ import type from '@/views/type'
 import find from '@/views/find'
 import book from '@/views/book'
 import typeDetail from '@/views/typeDetail'
+import detail from '@/views/detail'
 
 Vue.use(Router)
 
@@ -36,9 +37,14 @@ export default new Router({
       component: find
     },
     {
-      path: '/type/:id', 
-      name: 'typeDetail', 
+      path: '/type/:id',
+      name: 'typeDetail',
       component: typeDetail
+    },
+    {
+      path: '/detail/:id',
+      name: 'detail',
+      component: detail
     }
   ]
 })

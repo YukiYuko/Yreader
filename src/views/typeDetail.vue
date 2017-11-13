@@ -17,7 +17,7 @@
       .left-arrow:before{ border-color: #fff !important}
     }
   }
-  .list-menu{ 
+  .list-menu{
     position: fixed;left: 0;right: 0;top: 46px;height: 45px;
     overflow: hidden;box-shadow: 0 2px 2px -2px rgba(0,0,0,0.05);
     a{ height: 45px;display: inline-block;line-height: 45px;width: 60px;text-align: center;
@@ -25,7 +25,7 @@
     }
     &.list-menu2{ top: 91px;box-shadow: none;box-shadow: 0 2px 2px -2px rgba(0,0,0,0.05);}
   }
-  .typeList{ 
+  .typeList{
     position: absolute;bottom: 0;left: 0;right: 0;
     background-color: #F5F2ED;overflow: hidden;
     .item{ position: relative;padding: 15px;border-bottom: 1px solid #dddddd;
@@ -52,7 +52,7 @@
     <div class="list-menu">
       <a href="javascript:;" :class="{on:type === item.type}" @click="select(item.type,'type')" v-for="(item,index) in types" :key="index">{{item.name}}</a>
     </div>
-    
+
     <div class="list-menu list-menu2" v-if="mins.length">
       <x-scroll>
         <div @click="select('','minor')">
@@ -65,7 +65,7 @@
     </div>
     <scroll ref="scroll" :data="list" class="typeList" :style="{top:mins.length>0?'136px':'91px'}" @pullingUp="_getDetail" :pullUpLoad="true">
       <ul>
-        <li class="item" v-for="(book,index) in list" :key="index">
+        <li @click="$router.push({path:`/detail/${book._id}`})" class="item" v-for="(book,index) in list" :key="index">
           <img :src="staticPath+book.cover" alt="蕾姆">
           <div class="text">
             <h2 class="title">{{book.title}}</h2>
@@ -73,7 +73,7 @@
             <div class="intro">{{book.shortIntro}}</div>
             <div class="hot">
               <i>{{book.latelyFollower}}</i> 万人气 <span> | </span>  <i>{{book.retentionRatio}}%</i> 留存
-            </div> 
+            </div>
           </div>
         </li>
       </ul>

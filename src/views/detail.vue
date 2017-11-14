@@ -124,6 +124,7 @@ import moment from 'moment'
 import Scroll from "@/components/base/scroll/scroll.vue";
 import { XHeader } from 'vux'
 import { TransferDom, Popup} from 'vux'
+import { mapGetters, mapActions } from 'vuex'
 moment.locale('zh-cn');
 export default{
   data(){
@@ -144,6 +145,7 @@ export default{
     }
   },
   computed: {
+    ...mapGetters(['source']),
     wordCount () {
       return parseInt(this.data.wordCount / 10000, 10)
     }
@@ -155,24 +157,32 @@ export default{
     setTimeout(() => {
       this._getDetail()
     }, 20);
+    /**
+     * 设置默认小说源为优质书源
+     */
+    if (!this.$store.state.source) {
+      this.setResource(this.$route.params.id)
+    }
   },
   methods: {
+    ...mapActions(['setResource', 'getChapters']),
     _getDetail() {
       let id = this.$route.params.id
       api.getBook(id).then((res) => {
         this.data = res.data.data
-        console.log(this.data)
       }).catch(() => {
         console.log('请求错误')
       })
     },
     // 打开阅读
     _openRead() {
-      this.isReading = true
+      this.getChapters(this.source).then((res) => {
+        console.log(res.data)
+        this.isReading = true
+      })
     },
     // 打开设置
     openSetting() {
-      console.log(1)
       this.readBoxBottom = !this.readBoxBottom
       this.readBoxTop = !this.readBoxTop
     }

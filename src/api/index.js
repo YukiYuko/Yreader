@@ -63,7 +63,7 @@ export default {
        * 'http://api.zhuishushenqi.com/btoc?view=summary&book=548d9c17eb0337ee6df738f5'
        */
     getGenuineSource(bookId) {
-        return Vue.http.get('/btoc?view=summary&book=' + bookId)
+        return Vue.http.get('/book-sources?view=summary&book=' + bookId)
     },
 
     /**
@@ -89,7 +89,7 @@ export default {
        * @param {String} sourceId 小说源id
        */
     getChapters(sourceId) {
-        return Vue.http.get('/atoc/' + sourceId + '?view=chapters')
+        return Vue.http.get('/book-chapters/' + sourceId)
     },
 
     /**

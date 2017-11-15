@@ -14,5 +14,9 @@ export default {
   // 根据源获取小说章节
   getChapters ({commit}, id) {
     return API.getChapters(id)
+  },
+  // 获取小说章节第一章
+  getChaptersDetail ({commit}, link) {
+    return API.getBookChapterContent(link)
   }
 }

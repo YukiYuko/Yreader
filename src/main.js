@@ -5,6 +5,13 @@ import store from './store'
 import Mint from 'mint-ui';
 import Ajax from './utils/ajax'
 import 'mint-ui/lib/style.css';
+import { ToastPlugin, AlertPlugin, ConfirmPlugin, LoadingPlugin, TransferDom } from 'vux'
+
+Vue.use(ToastPlugin)
+Vue.use(AlertPlugin)
+Vue.use(ConfirmPlugin)
+Vue.use(LoadingPlugin)
+Vue.directive('TransferDom', TransferDom)
 
 Vue.use(Mint);
 Vue.use(Ajax,{

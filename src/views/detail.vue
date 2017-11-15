@@ -1,4 +1,5 @@
 <style lang="less">
+@import "../assets/less/minx";
 @import "../assets/less/base";
 .detail{
   position: fixed;  z-index: 100;  top: 0;  left: 0;  bottom: 0;
@@ -61,8 +62,37 @@
   .book-intro{ color: #333;font-size: @28px;line-height: @40px}
 }
 .readBox{ height: 100%;
-  .readBoxTop, .readBoxBottom{ height: @110px;background: rgba(0,0,0,0.8)}
+  .readBoxTop, .readBoxBottom{ height: @100px;background: rgba(0,0,0,0.8)}
+  .readBoxTop{
+    a{ height: 100%;display: inline-block;width: @110px;text-align: center;
+    line-height: @100px;color: #fff;
+      i{ font-size: @50px}
+    }
+  }
+  .readBoxBottom{
+    a{ width: 20%;text-align: center;height: 100%;
+      span, i{ margin: 5px 0}
+    }
+  }
+  .center{ height: 100%;background-color: #f0f0f0;
+    overflow: auto;color: #666;line-height: @50px;text-indent: @40px;
+  }
 }
+.catalogList{ height: 100%;position: relative;background-color: #fff;
+  .catalogListScroll{
+    position: absolute;left: 0;right: 0;bottom: @80px;overflow: hidden;
+    li{ height: @80px;line-height: @80px;border-bottom: 1px solid #e7e7e7;
+      color: #666;cursor: pointer;.ellipsis-mixin;box-sizing: border-box;
+      padding: 0 @24px;
+      i{ color: #ff4969; font-size: @40px}
+    }
+  }
+  .catalogListClose{ line-height: @80px;text-align: center;
+    background-color: #333;position: absolute;left: 0;right: 0;bottom: 0;
+    i{ font-size: @40px;color: #fff}
+  }
+}
+
 .vux-popup-dialog{ overflow-x: hidden;overflow-y: auto !important;}
 </style>
 <template>
@@ -104,13 +134,51 @@
     <div class="section book-intro" v-if="data">{{data.longIntro}}</div>
     <div v-transfer-dom>
       <popup v-model="isReading" height="100%">
-        <div class="readBox" @click="openSetting">
+        <div ref="readBox" class="readBox" @click="openSetting">
           <popup :show-mask="false" v-model="readBoxTop" position="top">
-            <div class="readBoxTop"></div>
+            <div class="readBoxTop">
+              <a href="javascript:;" @click="closeRead"><i class="iconfont icon-fanhui"></i></a>
+            </div>
           </popup>
+          <div class="center">
+            <div v-html="chapterContentNor"></div>
+          </div>
           <popup :show-mask="false" v-model="readBoxBottom" position="bottom">
-            <div class="readBoxBottom"></div>
+            <div class="readBoxBottom" flex>
+              <a href="javascript:;" flex dir="column" items="center">
+                <i class="iconfont icon-night"></i><span>夜间</span>
+              </a>
+              <a href="javascript:;" flex dir="column" items="center">
+                <i class="iconfont icon-fankui"></i><span>反馈</span>
+              </a>
+              <a @click="openLog" href="javascript:;" flex dir="column" items="center">
+                <i class="iconfont icon-mulu"></i><span>目录</span>
+              </a>
+              <a href="javascript:;" flex dir="column" items="center">
+                <i class="iconfont icon-huancun"></i><span>缓存</span>
+              </a>
+              <a href="javascript:;" flex dir="column" items="center">
+                <i class="iconfont icon-shezhi"></i><span>设置</span>
+              </a>
+            </div>
           </popup>
+        </div>
+      </popup>
+    </div>
+    <div v-transfer-dom>
+      <popup v-model="catalog" height="100%">
+        <div class="catalogList">
+          <scroll ref="catalogListScroll" :data="chapters" class="catalogListScroll">
+            <ul>
+              <li v-if="chapters.length" v-for="(item, index) in chapters">
+                {{item.title}}
+                <i v-if="item.isVip" class="iconfont icon-vip"></i>
+              </li>
+            </ul>
+          </scroll>
+          <div class="catalogListClose">
+            <i class="iconfont icon-guanbi"></i>
+          </div>
         </div>
       </popup>
     </div>
@@ -131,13 +199,13 @@ export default{
     return{
       staticPath,
       data: {},
+      chapterContent: '',
       isReading: false,
       readBoxBottom: false,   // 阅读底部菜单
-      readBoxTop: false   // 阅读顶部菜单
+      readBoxTop: false,  // 阅读顶部菜单
+      chapters: [], // 文章目录
+      catalog: false // 文章目录显示
     }
-  },
-  directives: {
-    TransferDom
   },
   filters: {
     ago (time) {
@@ -148,6 +216,9 @@ export default{
     ...mapGetters(['source']),
     wordCount () {
       return parseInt(this.data.wordCount / 10000, 10)
+    },
+    chapterContentNor () {
+        return this.chapterContent.replace(/\n/g, '<br/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp')
     }
   },
   components: {
@@ -165,7 +236,7 @@ export default{
     }
   },
   methods: {
-    ...mapActions(['setResource', 'getChapters']),
+    ...mapActions(['setResource', 'getChapters', 'getChaptersDetail']),
     _getDetail() {
       let id = this.$route.params.id
       api.getBook(id).then((res) => {
@@ -176,13 +247,32 @@ export default{
     },
     // 打开阅读
     _openRead() {
+      this.isReading = true
+      this.$vux.loading.show({
+        text: '正在加载...'
+      })
       this.getChapters(this.source).then((res) => {
-        console.log(res.data)
-        this.isReading = true
+        this.chapters = res.data.data.chapters
+        console.log(this.chapters)
+        this.getChaptersDetail(encodeURIComponent(this.chapters[0].link)).then((res) => {
+          console.log(res.data)
+          this.chapterContent = res.data.data.chapter.cpContent
+          console.log(this.chapterContent)
+          this.$vux.loading.hide()
+        })
       })
     },
+    // 关闭阅读
+    closeRead () {
+      this.isReading = false
+    },
+    // 打开目录
+    openLog () {
+      this.catalog = true
+      this.$refs['catalogListScroll'].refresh()
+    },
     // 打开设置
-    openSetting() {
+    openSetting(e) {
       this.readBoxBottom = !this.readBoxBottom
       this.readBoxTop = !this.readBoxTop
     }

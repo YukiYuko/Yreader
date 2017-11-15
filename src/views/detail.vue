@@ -75,7 +75,7 @@
     }
   }
   .center{ height: 100%;background-color: #f0f0f0;
-    overflow: auto;color: #666;line-height: @50px;text-indent: @40px;
+    overflow: hidden;color: #666;line-height: @50px;text-indent: @40px;
   }
 }
 .catalogList{ height: 100%;position: relative;background-color: #fff;
@@ -140,9 +140,11 @@
               <a href="javascript:;" @click="closeRead"><i class="iconfont icon-fanhui"></i></a>
             </div>
           </popup>
-          <div class="center">
-            <div v-html="chapterContentNor"></div>
-          </div>
+          <scroll ref="chapterContent" :data="chapterContent" class="center">
+            <div>
+              <p v-if="chapterContent.length" v-for="(item,index) in chapterContent" :key="index" v-html="item"></p>
+            </div>
+          </scroll>
           <popup :show-mask="false" v-model="readBoxBottom" position="bottom">
             <div class="readBoxBottom" flex>
               <a href="javascript:;" flex dir="column" items="center">
@@ -168,7 +170,7 @@
     <div v-transfer-dom>
       <popup v-model="catalog" height="100%">
         <div class="catalogList">
-          <scroll ref="catalogListScroll" :data="chapters" class="catalogListScroll">
+          <scroll ref="catalogListScroll" :data="chaptersList" class="catalogListScroll">
             <ul>
               <li v-if="chapters.length" v-for="(item, index) in chapters">
                 {{item.title}}
@@ -176,7 +178,7 @@
               </li>
             </ul>
           </scroll>
-          <div class="catalogListClose">
+          <div class="catalogListClose" @click="catalog = false">
             <i class="iconfont icon-guanbi"></i>
           </div>
         </div>
@@ -199,11 +201,12 @@ export default{
     return{
       staticPath,
       data: {},
-      chapterContent: '',
+      chapterContent: [],
       isReading: false,
       readBoxBottom: false,   // 阅读底部菜单
       readBoxTop: false,  // 阅读顶部菜单
       chapters: [], // 文章目录
+      chaptersList: [],
       catalog: false // 文章目录显示
     }
   },
@@ -212,13 +215,18 @@ export default{
       return moment(time).fromNow()
     }
   },
+  watch: {
+    chapterContent () {
+      this.$refs.chapterContent.refresh()
+    }
+  },
   computed: {
     ...mapGetters(['source']),
     wordCount () {
       return parseInt(this.data.wordCount / 10000, 10)
     },
     chapterContentNor () {
-        return this.chapterContent.replace(/\n/g, '<br/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp')
+        return this.chapterContent.length && this.chapterContent[0].replace(/\n/g, '<br/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp')
     }
   },
   components: {
@@ -247,17 +255,17 @@ export default{
     },
     // 打开阅读
     _openRead() {
+      this.chapterContent = []
       this.isReading = true
       this.$vux.loading.show({
         text: '正在加载...'
       })
       this.getChapters(this.source).then((res) => {
-        this.chapters = res.data.data.chapters
+        this.chapters = [...res.data.data.chapters]
         console.log(this.chapters)
         this.getChaptersDetail(encodeURIComponent(this.chapters[0].link)).then((res) => {
           console.log(res.data)
-          this.chapterContent = res.data.data.chapter.cpContent
-          console.log(this.chapterContent)
+          this.chapterContent.push(res.data.data.chapter.cpContent.replace(/\n/g, '<br/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'))
           this.$vux.loading.hide()
         })
       })
@@ -269,7 +277,7 @@ export default{
     // 打开目录
     openLog () {
       this.catalog = true
-      this.$refs['catalogListScroll'].refresh()
+      this.chaptersList = this.chapters
     },
     // 打开设置
     openSetting(e) {

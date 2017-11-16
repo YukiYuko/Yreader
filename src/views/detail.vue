@@ -110,7 +110,7 @@
         </div>
       </div>
       <div class="foot">
-        <a href="javascript:;">追更新</a>
+        <a @click="follow" href="javascript:;">{{isFollowed ? '不追了' : '追更新'}}</a>
         <a @click="_openRead" href="javascript:;">开始阅读</a>
       </div>
     </div>
@@ -190,6 +190,7 @@
 <script type="es6">
 import api from "../api"
 import { staticPath } from "@/utils/const.js"
+import util from '@/utils/index'
 import moment from 'moment'
 import Scroll from "@/components/base/scroll/scroll.vue";
 import { XHeader } from 'vux'
@@ -200,6 +201,7 @@ export default{
   data(){
     return{
       staticPath,
+      isFollowed: false,  // 是否加入到本地
       data: {},
       chapterContent: [],
       isReading: false,
@@ -249,6 +251,7 @@ export default{
       let id = this.$route.params.id
       api.getBook(id).then((res) => {
         this.data = res.data.data
+        this.isFollowBook()
       }).catch(() => {
         console.log('请求错误')
       })
@@ -283,6 +286,31 @@ export default{
     openSetting(e) {
       this.readBoxBottom = !this.readBoxBottom
       this.readBoxTop = !this.readBoxTop
+    },
+    isFollowBook () {
+      // 判断是否缓存（加入书架）
+      let localShelf = util.getLocalStroageData('followBookList')
+      this.isFollowed = !!(localShelf && localShelf[this.data._id])
+    },
+    // 追更新
+    follow () {
+      let localShelf = util.getLocalStroageData('followBookList') ? util.getLocalStroageData('followBookList') : {}
+      if (this.isFollowed) {
+        // 删除该书籍在本地的缓存记录
+        delete localShelf[this.data._id]
+        // 重新保存
+        util.setLocalStroageData('followBookList', localShelf)
+        this.isFollowed = !this.isFollowed
+      } else {
+        // 以bookId为键值，方便后续删除等操作
+        localShelf[this.data._id] = {
+          cover: this.data.cover,
+          title: this.data.title,
+          source: this.$store.state.source
+        }
+        util.setLocalStroageData('followBookList', localShelf)
+        this.isFollowed = !this.isFollowed
+      }
     }
   }
 }

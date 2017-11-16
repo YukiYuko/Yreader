@@ -123,7 +123,7 @@ export default {
        *  @param {String} searchWord 搜索内容
        */
     fuzzySearch(searchWord) {
-        return Vue.http.get('/book/fuzzy-search?query=' + searchWord)
+        return Vue.http.get('/search?keyword=' + searchWord)
     },
 
     /**

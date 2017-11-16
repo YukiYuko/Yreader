@@ -15,7 +15,7 @@ export default {
        * @returns {String} id为周榜id，月榜id，总榜id
        */
     getRankList(id) {
-        return Vue.http.get('/ranking/' + id)
+        return Vue.http.get('/rank/' + id)
     },
 
     /**

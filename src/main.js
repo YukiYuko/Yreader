@@ -5,6 +5,7 @@ import store from './store'
 import Mint from 'mint-ui';
 import Ajax from './utils/ajax'
 import 'mint-ui/lib/style.css';
+import VueLazyload from 'vue-lazyload'
 import { ToastPlugin, AlertPlugin, ConfirmPlugin, LoadingPlugin, TransferDom } from 'vux'
 
 Vue.use(ToastPlugin)
@@ -16,6 +17,10 @@ Vue.directive('TransferDom', TransferDom)
 Vue.use(Mint);
 Vue.use(Ajax,{
   baseURL: 'http://novel.juhe.im/'
+})
+Vue.use(VueLazyload, {
+  loading: require('@/assets/logo.png'),
+  attempt: 1
 })
 
 Vue.config.productionTip = false

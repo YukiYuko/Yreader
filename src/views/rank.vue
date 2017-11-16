@@ -49,7 +49,7 @@
                 <mt-tab-container v-model="selected" :swipeable="true" v-if="list.length > 0">
                     <mt-tab-container-item id="1">
                         <ul>
-                            <li class="rankTop" v-for="(item,index) in list[0].male" :key="index" v-if="!item.collapse">
+                            <li @click="$router.push({path:`/rank/${item._id}`})" class="rankTop" v-for="(item,index) in list[0].male" :key="index" v-if="!item.collapse">
                                 <img :src="`${imgUrl+item.cover}`" :alt="item.title">
                                 <span>{{item.title}}</span>
                             </li>
@@ -112,18 +112,25 @@ export default {
         Scroll
     },
     methods: {
-        show1() {
-            this.showMale = !this.showMale;
-            this.$nextTick(() => {
-                this.$refs.scroll.refresh()
-            })
-        },
-        show2() {
-            this.showFeMale = !this.showFeMale;
-            this.$nextTick(() => {
-                this.$refs.scroll.refresh()
-            })
-        }
+      show1() {
+          this.showMale = !this.showMale;
+          this.$nextTick(() => {
+              this.$refs.scroll.refresh()
+          })
+      },
+      show2() {
+          this.showFeMale = !this.showFeMale;
+          this.$nextTick(() => {
+              this.$refs.scroll.refresh()
+          })
+      },
+      goRankList(item) {
+          console.log(item)
+//        api.getRankList(_id).then((res) => {
+//          let data = res.data.data
+//
+//        })
+      }
     }
 }
 </script>

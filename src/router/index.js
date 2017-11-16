@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 import home from '@/views/home'
 import rank from '@/views/rank'
+import rankList from '@/views/rankList'
 import type from '@/views/type'
 import find from '@/views/find'
 import book from '@/views/book'
@@ -25,6 +25,11 @@ export default new Router({
       path: '/rank',
       name: 'rank',
       component: rank
+    },
+    {
+      path: '/rank/:id',
+      name: 'rankList',
+      component: rankList
     },
     {
       path: '/type',

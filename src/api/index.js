@@ -7,7 +7,7 @@ export default {
        * @returns {null}
        */
     getRankType() {
-        return Vue.http.get('/ranking/gender')
+        return Vue.http.get('/rank-category')
     },
 
     /**

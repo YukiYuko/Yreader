@@ -8,7 +8,8 @@
 }
 
 .list-content {
-    height: 100%;
+    position: absolute;left: 0;right: 0;top: 50px;
+    bottom: 0;
     overflow: hidden;
     .rankTop {
         line-height: 45px;
@@ -33,15 +34,18 @@
         }
     }
 }
+.mint-navbar .mint-tab-item.is-selected{
+  color: #e87a90;border-color: #e87a90;
+}
 </style>
 <template>
     <div class="home">
+        <mt-navbar v-model="selected">
+          <mt-tab-item id="1">男生</mt-tab-item>
+          <mt-tab-item id="2">女生</mt-tab-item>
+        </mt-navbar>
         <scroll ref="scroll" :data="list" class="list-content">
             <div>
-                <mt-navbar v-model="selected">
-                    <mt-tab-item id="1">男生</mt-tab-item>
-                    <mt-tab-item id="2">女生</mt-tab-item>
-                </mt-navbar>
                 <mt-tab-container v-model="selected" :swipeable="true" v-if="list.length > 0">
                     <mt-tab-container-item id="1">
                         <ul>
@@ -95,7 +99,8 @@ export default {
         }
     },
     created() {
-        api.getRankType().then(({ data }) => {
+        api.getRankType().then((res) => {
+            let data = res.data.data
             this.list.push({ male: data.male });
             this.list.push({ female: data.female });
             console.log(this.list);

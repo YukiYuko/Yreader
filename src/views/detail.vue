@@ -241,9 +241,7 @@ export default{
     /**
      * 设置默认小说源为优质书源
      */
-    if (!this.$store.state.source) {
-      this.setResource(this.$route.params.id)
-    }
+    this.setResource(this.$route.params.id)
   },
   methods: {
     ...mapActions(['setResource', 'getChapters', 'getChaptersDetail']),
@@ -303,11 +301,7 @@ export default{
         this.isFollowed = !this.isFollowed
       } else {
         // 以bookId为键值，方便后续删除等操作
-        localShelf[this.data._id] = {
-          cover: this.data.cover,
-          title: this.data.title,
-          source: this.$store.state.source
-        }
+        localShelf[this.data._id] = {...this.data}
         util.setLocalStroageData('followBookList', localShelf)
         this.isFollowed = !this.isFollowed
       }

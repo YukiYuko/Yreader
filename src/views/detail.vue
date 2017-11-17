@@ -174,7 +174,7 @@
     <div v-transfer-dom>
       <popup v-model="catalog" height="100%">
         <div class="catalogList">
-          <scroll ref="catalogListScroll" :data="chaptersList" class="catalogListScroll">
+          <scroll @pullingUp="addLog" :pullUpLoad="true" ref="catalogListScroll" :data="chapters" class="catalogListScroll">
             <ul>
               <li v-if="chapters.length" v-for="(item, index) in chapters">
                 {{item.title}}
@@ -211,7 +211,9 @@ export default{
       isReading: false,
       readBoxBottom: false,   // 阅读底部菜单
       readBoxTop: false,  // 阅读顶部菜单
+      total: [],  // 目录总数
       chapters: [], // 文章目录
+      loadPages: 0, // 滚动加载的记次
       chaptersList: [],
       catalog: false, // 文章目录显示
       nightMode: false // 日夜模式
@@ -225,6 +227,9 @@ export default{
   watch: {
     chapterContent () {
       this.$refs.chapterContent.refresh()
+    },
+    chaptersList () {
+      this.$refs.catalogListScroll.refresh()
     }
   },
   computed: {
@@ -267,7 +272,8 @@ export default{
         text: '正在加载...'
       })
       this.getChapters(this.source).then((res) => {
-        this.chapters = [...res.data.data.chapters]
+        this.total = [...res.data.data.chapters]
+        this.chapters = this.total.splice(0, 50)
         this.getChaptersDetail(encodeURIComponent(this.chapters[0].link)).then((res) => {
           console.log(res.data)
           this.chapterContent.push(res.data.data.chapter.cpContent.replace(/\n/g, '<br/>&nbsp&nbsp&nbsp&nbsp&nbsp'))
@@ -282,7 +288,17 @@ export default{
     // 打开目录
     openLog () {
       this.catalog = true
-      this.chaptersList = this.chapters
+      this.$nextTick(() => {
+        this.$refs.catalogListScroll.refresh()
+      })
+    },
+    // 下拉加载目录
+    addLog () {
+      let totalLen = this.total.length
+      this.chapters = this.chapters.concat(
+        this.total.slice(50 * this.loadPages, 50 * (this.loadPages + 1))
+      )
+      this.loadPages++
     },
     // 打开设置
     openSetting(e) {

@@ -8,6 +8,7 @@ import find from '@/views/find'
 import book from '@/views/book'
 import typeDetail from '@/views/typeDetail'
 import detail from '@/views/detail'
+import readBook from '@/views/readBook'
 
 Vue.use(Router)
 
@@ -50,6 +51,11 @@ export default new Router({
       path: '/detail/:id',
       name: 'detail',
       component: detail
+    },
+    {
+      path: '/readbook/:bookId',
+      name: 'readbook',
+      component: readBook
     }
   ]
 })

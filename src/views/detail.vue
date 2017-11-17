@@ -77,6 +77,10 @@
   .center{ height: 100%;background-color: #f0f0f0;
     overflow: hidden;color: #666;line-height: @50px;text-indent: @40px;
   }
+  .night-mode {
+    background: #383434;
+    color: #807d7d;
+  }
 }
 .catalogList{ height: 100%;position: relative;background-color: #fff;
   .catalogListScroll{
@@ -140,15 +144,15 @@
               <a href="javascript:;" @click="closeRead"><i class="iconfont icon-fanhui"></i></a>
             </div>
           </popup>
-          <scroll ref="chapterContent" :data="chapterContent" class="center">
+          <scroll ref="chapterContent" :data="chapterContent" class="center" :class="{'night-mode':nightMode}">
             <div>
               <p v-if="chapterContent.length" v-for="(item,index) in chapterContent" :key="index" v-html="item"></p>
             </div>
           </scroll>
           <popup :show-mask="false" v-model="readBoxBottom" position="bottom">
             <div class="readBoxBottom" flex>
-              <a href="javascript:;" flex dir="column" items="center">
-                <i class="iconfont icon-night"></i><span>夜间</span>
+              <a @click="nightMode = !nightMode" href="javascript:;" flex dir="column" items="center">
+                <i class="iconfont icon-night"></i><span>{{nightMode?'日间':'夜间'}}</span>
               </a>
               <a href="javascript:;" flex dir="column" items="center">
                 <i class="iconfont icon-fankui"></i><span>反馈</span>
@@ -209,7 +213,8 @@ export default{
       readBoxTop: false,  // 阅读顶部菜单
       chapters: [], // 文章目录
       chaptersList: [],
-      catalog: false // 文章目录显示
+      catalog: false, // 文章目录显示
+      nightMode: false // 日夜模式
     }
   },
   filters: {
@@ -263,10 +268,9 @@ export default{
       })
       this.getChapters(this.source).then((res) => {
         this.chapters = [...res.data.data.chapters]
-        console.log(this.chapters)
         this.getChaptersDetail(encodeURIComponent(this.chapters[0].link)).then((res) => {
           console.log(res.data)
-          this.chapterContent.push(res.data.data.chapter.cpContent.replace(/\n/g, '<br/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'))
+          this.chapterContent.push(res.data.data.chapter.cpContent.replace(/\n/g, '<br/>&nbsp&nbsp&nbsp&nbsp&nbsp'))
           this.$vux.loading.hide()
         })
       })

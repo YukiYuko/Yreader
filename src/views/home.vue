@@ -42,7 +42,7 @@
         </li>
       </ul>
     </scroll>
-    <div flex class="collect no" items="center" justify="center">
+    <div v-if="!list.length" flex class="collect no" items="center" justify="center">
       <router-link to="type" class="goBook" href="javascript:;">去找书</router-link>
     </div>
     <router-view></router-view>
